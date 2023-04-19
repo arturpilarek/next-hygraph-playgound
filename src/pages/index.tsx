@@ -1,17 +1,18 @@
 import { gql } from '@apollo/client'
 import { Inter } from 'next/font/google'
 import Head from 'next/head'
+import Link from 'next/link'
 import client from '../../lib/apolloClient'
 
 const inter = Inter({ subsets: ['latin'] })
 
 type Props = {
-  hygraphData: any
+  streamDemos: any
 }
 
-export default function Home({ hygraphData} : Props) {
+export default function Home({ streamDemos} : Props) {
 
-  console.log(hygraphData);
+  console.log(streamDemos);
 
   return (
     <div>
@@ -20,8 +21,18 @@ export default function Home({ hygraphData} : Props) {
       <meta name="description" content="Hygraph playground" />
       <link rel="icon" href="/favicon.ico" />
     </Head>
-    <main className="flex flex-col items-center justify-between min-h-screen p-24">
-      <h1 className="text-6xl font-bold">Hello World</h1>
+    <main className="flex flex-col items-center min-h-screen p-24">
+      <h1 className="pb-6 text-6xl font-bold">Hello World</h1>
+      <div>
+        <h3>List of podcasts</h3>
+        <ul> 
+          {streamDemos.map((streamDemo: any) => (
+            <li key={streamDemo.id}>
+              <Link href={`streams/${streamDemo.slug}`}><h4>{streamDemo.title}</h4></Link>
+            </li>
+              ))}
+          </ul>
+      </div>
     </main>
     </div>
   )
@@ -42,16 +53,17 @@ query MyQuery {
     description {
       raw
     }
+    slug
   }
 }
     `,
   });
 
-  console.log(hygraphData);
+  const { streamDemos } = hygraphData;
 
   return {
     props: {
-      hygraphData,
+      streamDemos,
     },
  };
 }
